@@ -1,13 +1,16 @@
 package com.example.fragmenttransition
 
 import android.app.Activity
+import android.os.Build
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,9 +20,9 @@ class OneFragment : Fragment() {
     var activityCallback: OneFragmentListener? = null
     lateinit var adapter: CustomeAdapter
     lateinit var recyclerView: RecyclerView
-    //Listener for onButtonClick UI
+
     interface OneFragmentListener {
-        fun onButtonClick(text: Int)
+        fun onButtonClick(text: Int, imageView: ImageView)
     }
 
     override fun onAttach(activity: Activity) {
@@ -34,19 +37,17 @@ class OneFragment : Fragment() {
         }
     }
 
-    //We get the reference to the editText and the button setUp the OnClickListener
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.one_fragment, container, false)
-        /*mEditText =
-            view.findViewById<View>(R.id.textOneFragment) as EditText
-        val button =
-            view.findViewById<View>(R.id.buttonChange) as Button
-        button.setOnClickListener { v -> buttonClicked(v) }*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+            //sharedElementReturnTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+
+        }
         recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         return view
     }
@@ -63,12 +64,9 @@ class OneFragment : Fragment() {
 
         recyclerView.adapter = adapter
 
-        adapter.setOnClickListener {
-            activityCallback?.onButtonClick(it)
+        adapter.setOnClickListener {i, j ->
+            activityCallback?.onButtonClick(i, j)
         }
 
-    }
-    companion object {
-        private var mEditText: EditText? = null
     }
 }

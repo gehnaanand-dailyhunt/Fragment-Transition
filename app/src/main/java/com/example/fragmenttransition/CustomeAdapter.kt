@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.ViewCompat
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,9 +14,9 @@ import com.bumptech.glide.Glide
 
 class CustomeAdapter () : ListAdapter<Int, ItemViewHolder>(DiffCallback()){
 
-    lateinit var onClick : (Int) -> Unit
+    lateinit var onClick : (Int, ImageView) -> Unit
 
-    fun setOnClickListener(onClick: (Int) -> Unit){
+    fun setOnClickListener(onClick: (Int, ImageView) -> Unit){
         this.onClick = onClick
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -24,7 +25,7 @@ class CustomeAdapter () : ListAdapter<Int, ItemViewHolder>(DiffCallback()){
         val holder = ItemViewHolder(view)
 
         holder.imageView.setOnClickListener{
-            onClick(getItem(holder.adapterPosition))
+            onClick(getItem(holder.adapterPosition), holder.imageView)
         }
         return holder
     }
@@ -35,7 +36,7 @@ class CustomeAdapter () : ListAdapter<Int, ItemViewHolder>(DiffCallback()){
             .load(getItem(position))
             .into(holder.imageView)
 
-
+        ViewCompat.setTransitionName(holder.imageView, getItem(position).toString())
     }
 
 }
